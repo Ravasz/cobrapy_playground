@@ -38,6 +38,7 @@ print('Escher directory: %s' % d)
 
 escher.list_available_maps()
 """
+"""
 b = escher.Builder(map_name='e_coli_core.Core metabolism')
 #b.display_in_browser()
 
@@ -50,14 +51,33 @@ testDict = json.loads(jsonItem)
 print(testDict)
 
 print('Growth rate: %.2f' % sol.f)
+"""
 
-b = escher.Builder(map_name='e_coli_core.Core metabolism',
-                   reaction_data=testDict,
-                   # change the default colors
-                   reaction_scale=[{'type': 'min', 'color': '#cccccc', 'size': 4},
-                                   {'type': 'mean', 'color': '#0000dd', 'size': 20},
-                                   {'type': 'max', 'color': '#ff0000', 'size': 40}],
-                   # only show the primary metabolites
-                   hide_secondary_metabolites=True)
-#b.display_in_browser(js_source='web')
-b.display_in_browser()
+import cobra.test
+model = cobra.test.create_test_model("textbook")
+ex_oxygen = model.reactions.get_by_id("EX_o2_e")
+with model as newModel:
+    ex_oxygen.lower_bound = 0
+    ex_oxygen.upper_bound = 1
+    newSolution = newModel.optimize()
+    
+    newSolution.fluxes.to_json("solution3.json")
+    jsonFile = open("solution3.json","r")
+    jsonItem = jsonFile.read()
+    testDict = json.loads(jsonItem)
+    print(testDict)
+    
+    
+
+    
+    
+    b = escher.Builder(map_name='e_coli_core.Core metabolism',
+                       reaction_data=testDict,
+                       # change the default colors
+                       reaction_scale=[{'type': 'min', 'color': '#cccccc', 'size': 4},
+                                       {'type': 'mean', 'color': '#0000dd', 'size': 20},
+                                       {'type': 'max', 'color': '#ff0000', 'size': 40}],
+                       # only show the primary metabolites
+                       hide_secondary_metabolites=False)
+    #b.display_in_browser(js_source='web')
+    b.display_in_browser()
