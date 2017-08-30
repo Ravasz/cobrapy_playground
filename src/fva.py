@@ -8,6 +8,8 @@ import cobra.test
 model = cobra.test.create_test_model("textbook")
 
 solution = model.optimize()
+
+"""
 print(solution)
 
 solution.objective_value
@@ -19,6 +21,8 @@ model.metabolites.nadh_c.summary()
 model.metabolites.atp_c.summary()
 
 biomass_rxn = model.reactions.get_by_id("Biomass_Ecoli_core")
+
+"""
 
 from cobra.util.solver import linear_reaction_coefficients
 linear_reaction_coefficients(model)
@@ -35,11 +39,14 @@ model.optimize().objective_value
 
 from cobra.flux_analysis import flux_variability_analysis
 
-print(flux_variability_analysis(model, model.reactions[:10]))
+print(flux_variability_analysis(model, model.reactions))
 
 cobra.flux_analysis.flux_variability_analysis(
     model, model.reactions[:10], fraction_of_optimum=0.9)
 
+
+
+"""
 loop_reactions = [model.reactions.FRD7, model.reactions.SUCDi]
 flux_variability_analysis(model, reaction_list=loop_reactions, loopless=False)
 
@@ -59,3 +66,4 @@ print(pfba_solution)
 print(abs(fba_solution.fluxes["Biomass_Ecoli_core"] - pfba_solution.fluxes[
     "Biomass_Ecoli_core"]))
 
+"""
