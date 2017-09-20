@@ -30,6 +30,7 @@ for reaction in mylist:
             print('%s blocked (bounds: %s), new growth rate %f' %
                   (reaction.id, str(reaction.bounds), model.objective.value))
 
+"""
 print('original objective: ', model.objective.expression)
 with model:
     model.objective = 'ATPM'
@@ -60,3 +61,4 @@ for x in model.genes:
     print("%s is associated with reactions: %s" %
           (x.id, "{" + ", ".join(associated_ids) + "}"))                
             
+"""
