@@ -58,6 +58,9 @@ SucCoa = bigg.metabolites.get_by_id("succoa_c")
 COA = bigg.metabolites.get_by_id("coa_c")
 NADH = bigg.metabolites.get_by_id("nadh_c")
 NAD = bigg.metabolites.get_by_id("nad_c")
+ACCOA = bigg.metabolites.get_by_id("accoa_c")
+AC = bigg.metabolites.get_by_id("ac_c")
+
 
 HB_c = Metabolite(
     '4HB_c',
@@ -110,11 +113,25 @@ succCoASyn.add_metabolites({
 })
 
 hydroBH.add_metabolites({
-    SucCoa: -1.0,
+    Succ: -1.0,
     NADH: -1.0,
-    COA: 1.0,
     NAD: 1.0,
-    Succ: 1.0,
+    HB_c: 1.0,
+})
+
+hydroBCOAT.add_metabolites({
+    ACCOA: -1.0,
+    AC: 1.0,
+    HBcoa_c: 1.0,
+    HB_c: -1.0,
+})
+
+hydroBCOAR.add_metabolites({
+    NADH: -1.0,
+    NAD: 1.0,
+    COA: 1.0,
+    HB_c: -1.0,
+    HBaldehyde: 1.0,
 })
 
 
