@@ -92,3 +92,17 @@ HBcoa_c = Metabolite(
     formula='C25H42N7O18P3S',
     name='4HBcoa_c',
     compartment='c')
+
+
+HBaldehyde = Metabolite(
+    'HBaldehyde_c',
+    formula='C4H8O2',
+    name='HBaldehyde_c',
+    compartment='c')
+
+
+BDO = Metabolite(
+    'BDO_c',
+    formula='C4H10O2',
+    name='BDO_c',
+    compartment='c')
