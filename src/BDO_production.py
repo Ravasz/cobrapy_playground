@@ -22,6 +22,39 @@ oxoGlut.lower_bound = 0.  # This is the default
 oxoGlut.upper_bound = 1000.  # This is the default
 bigg.add_reactions([oxoGlut])
 
+succCoASyn = Reaction("SCoAs")
+succCoASyn.name = 'succinyl-CoA synthetase'
+succCoASyn.subsystem = ''
+succCoASyn.lower_bound = 0.  
+succCoASyn.upper_bound = 1000.  
+bigg.add_reactions([succCoASyn])
+
+
+
+Succ = bigg.metabolites.get_by_id("sucsal_c")
+CO2 = bigg.metabolites.get_by_id("co2_c")
+AKG = bigg.metabolites.get_by_id("akg_c")
+SucCoa = bigg.metabolites.get_by_id("succoa_c")
+COA = bigg.metabolites.get_by_id("coa_c")
+NADH = bigg.metabolites.get_by_id("nadh_c")
+NAD = bigg.metabolites.get_by_id("nad_c")
+
+
+oxoGlut.add_metabolites({
+    Succ: 1.0,
+    CO2: 1.0,
+    AKG: -1.0,
+})
+
+succCoASyn.add_metabolites({
+    SucCoa: -1.0,
+    NADH: -1.0,
+    COA: 1.0,
+    NAD: 1.0,
+    Succ: 1.0,
+})
+
+
 
 """
 Ssem_c = Metabolite(
@@ -42,14 +75,6 @@ ddcaACP_c = Metabolite(
     name='Dodecanoyl-ACP-n-C120ACP',
     compartment='c')
 """
-Succ = bigg.metabolites.get_by_id("sucsal_c")
-CO2 = bigg.metabolites.get_by_id("co2_c")
-AKG = bigg.metabolites.get_by_id("akg_c")
 
-oxoGlut.add_metabolites({
-    Succ: 1.0,
-    CO2: 1.0,
-    AKG: -1.0,
-})
 
 print(oxoGlut.metabolites)
