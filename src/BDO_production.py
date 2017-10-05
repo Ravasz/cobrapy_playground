@@ -80,14 +80,14 @@ ddcaACP_c = Metabolite(
 print(oxoGlut.metabolites)
 
 
-4HB_c = Metabolite(
+HB_c = Metabolite(
     '4HB_c',
     formula='C4H7O3',
     name='4HB_c',
     compartment='c')
 
 
-4HBcoa_c = Metabolite(
+HBcoa_c = Metabolite(
     '4HBcoa_c',
     formula='C25H42N7O18P3S',
     name='4HBcoa_c',
