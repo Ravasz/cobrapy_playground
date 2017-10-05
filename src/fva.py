@@ -46,7 +46,7 @@ cobra.flux_analysis.flux_variability_analysis(
 
 
 
-"""
+
 loop_reactions = [model.reactions.FRD7, model.reactions.SUCDi]
 flux_variability_analysis(model, reaction_list=loop_reactions, loopless=False)
 
@@ -66,4 +66,3 @@ print(pfba_solution)
 print(abs(fba_solution.fluxes["Biomass_Ecoli_core"] - pfba_solution.fluxes[
     "Biomass_Ecoli_core"]))
 
-"""
