@@ -50,6 +50,13 @@ hydroBCOAR.lower_bound = 0.
 hydroBCOAR.upper_bound = 1000.  
 bigg.add_reactions([hydroBCOAR])
 
+alcodehyd = Reaction("alcdehyd")
+alcodehyd.name = 'alcohol dehydrogenase for BDO'
+alcodehyd.subsystem = 'Pyruvate Metabolism'
+alcodehyd.lower_bound = 0.  
+alcodehyd.upper_bound = 1000.  
+bigg.add_reactions([alcodehyd])
+
 
 Succ = bigg.metabolites.get_by_id("sucsal_c")
 CO2 = bigg.metabolites.get_by_id("co2_c")
@@ -134,6 +141,12 @@ hydroBCOAR.add_metabolites({
     HBaldehyde: 1.0,
 })
 
+alcodehyd.add_metabolites({
+    HBaldehyde: -1.0,
+    NADH: -1.0,
+    NAD: 1.0,
+    BDO: -1.0,
+})
 
 """
 Ssem_c = Metabolite(
