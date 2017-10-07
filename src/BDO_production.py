@@ -2,11 +2,16 @@
 Created on 5 Oct 2017
 
 @author: mate
+
+This script reads in the iJR904 E. Coli model from a json format, 
+and adds the BDO synthesis pathway to it
 '''
-from cobra import Model, Reaction, Metabolite
+from cobra import Reaction, Metabolite
+
+
+#this is a very detailed E. Coli model with about 1000 enzymes:
 
 from cobra.io import load_json_model
-
 bigg = load_json_model("/home/mate/code/cobrapy-playground/src/models/iJR904.json")
 
 print(len(bigg.reactions))
@@ -14,6 +19,10 @@ print(len(bigg.metabolites))
 print(len(bigg.genes))
 
 # print(bigg.metabolites)
+
+
+# added additional reactions here to the model to create the BDO synthesis pathway
+
 
 oxoGlut = Reaction('2OxDe')
 oxoGlut.name = '2 oxoglutarate decarboxylase'
@@ -58,6 +67,9 @@ alcodehyd.upper_bound = 1000.
 bigg.add_reactions([alcodehyd])
 
 
+# These are the metabolites taking part in the new reactions
+
+
 Succ = bigg.metabolites.get_by_id("sucsal_c")
 CO2 = bigg.metabolites.get_by_id("co2_c")
 AKG = bigg.metabolites.get_by_id("akg_c")
@@ -68,6 +80,7 @@ NAD = bigg.metabolites.get_by_id("nad_c")
 ACCOA = bigg.metabolites.get_by_id("accoa_c")
 AC = bigg.metabolites.get_by_id("ac_c")
 
+# the metabolites below were not part of the model originally, they were added py Paolo
 
 HB_c = Metabolite(
     '4HB_c',
@@ -96,6 +109,8 @@ BDO = Metabolite(
     name='BDO_c',
     compartment='c')
 
+# finally we add all these metabolites to their respective reaction
+# to create the new BDO synthesis pathway
 
 oxoGlut.add_metabolites({
     Succ: 1.0,
@@ -148,26 +163,7 @@ alcodehyd.add_metabolites({
     BDO: -1.0,
 })
 
-"""
-Ssem_c = Metabolite(
-    'Ssem_c',
-    formula='C25H45N2O9PRS',
-    name='3-Oxotetradecanoyl-acyl-carrier-protein',
-    compartment='c')
-co2_c = Metabolite('co2_c', formula='CO2', name='CO2', compartment='c')
-malACP_c = Metabolite(
-    'malACP_c',
-    formula='C14H22N2O10PRS',
-    name='Malonyl-acyl-carrier-protein',
-    compartment='c')
-h_c = Metabolite('h_c', formula='H', name='H', compartment='c')
-ddcaACP_c = Metabolite(
-    'ddcaACP_c',
-    formula='C23H43N2O8PRS',
-    name='Dodecanoyl-ACP-n-C120ACP',
-    compartment='c')
-"""
 
 
-print(oxoGlut.metabolites)
+# print(oxoGlut.metabolites)
 
