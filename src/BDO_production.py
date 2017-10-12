@@ -14,6 +14,18 @@ from cobra import Reaction, Metabolite
 from cobra.io import load_json_model
 bigg = load_json_model("/home/mate/code/cobrapy-playground/src/models/iJR904.json")
 
+newReaction = bigg.reactions.get_by_id("BIOMASS_Ecoli")
+
+newThing = bigg.reactions.get_by_id("EX_glc__D_e")
+
+print(newThing.reaction)
+
+bigg.objective = newReaction
+bigg.optimize()
+print(bigg.objective.value)
+print(newThing.flux)
+
+
 print(len(bigg.reactions))
 print(len(bigg.metabolites))
 print(len(bigg.genes))
@@ -23,6 +35,12 @@ print(len(bigg.genes))
 
 # added additional reactions here to the model to create the BDO synthesis pathway
 
+dbo_export = Reaction("bdo_ex")
+dbo_export.name = "generic BDO export function"
+dbo_export.subsystem = "Pyruvate Metabolism"
+dbo_export.lower_bound = 0.  # This is the default
+dbo_export.upper_bound = 1000.  # This is the default
+bigg.add_reactions([dbo_export])
 
 oxoGlut = Reaction('2OxDe')
 oxoGlut.name = '2 oxoglutarate decarboxylase'
@@ -44,6 +62,7 @@ hydroBH.subsystem = 'Pyruvate Metabolism'
 hydroBH.lower_bound = 0.  
 hydroBH.upper_bound = 1000.  
 bigg.add_reactions([hydroBH])
+
 
 hydroBCOAT = Reaction("4HBCOAT")
 hydroBCOAT.name = '4 hydroxybutyryl-CoA transferase'
@@ -109,6 +128,9 @@ BDO = Metabolite(
     name='BDO_c',
     compartment='c')
 
+
+
+
 # finally we add all these metabolites to their respective reaction
 # to create the new BDO synthesis pathway
 
@@ -116,14 +138,6 @@ oxoGlut.add_metabolites({
     Succ: 1.0,
     CO2: 1.0,
     AKG: -1.0,
-})
-
-succCoASyn.add_metabolites({
-    SucCoa: -1.0,
-    NADH: -1.0,
-    COA: 1.0,
-    NAD: 1.0,
-    Succ: 1.0,
 })
 
 succCoASyn.add_metabolites({
@@ -152,7 +166,7 @@ hydroBCOAR.add_metabolites({
     NADH: -1.0,
     NAD: 1.0,
     COA: 1.0,
-    HB_c: -1.0,
+    HBcoa_c: -1.0,
     HBaldehyde: 1.0,
 })
 
@@ -160,10 +174,38 @@ alcodehyd.add_metabolites({
     HBaldehyde: -1.0,
     NADH: -1.0,
     NAD: 1.0,
-    BDO: -1.0,
+    BDO: 1.0,
 })
 
+dbo_export.add_metabolites({
+    BDO: -1.0
+    })
 
+
+print(alcodehyd.reaction)
 
 # print(oxoGlut.metabolites)
 
+print("---")
+targetReaction = bigg.reactions.get_by_id("BIOMASS_Ecoli")
+bdo_reaction = bigg.reactions.get_by_id("alcdehyd")
+bigg.objective = targetReaction
+bigg.optimize()
+
+print("objective reaction: ",targetReaction)
+print("flux of objective.reaction: ", targetReaction.flux)
+print("growth rate: ", newReaction.flux)
+print("objective value: ",bigg.objective.value)
+print("reaction 4 flux: ", hydroBH.flux)
+print("BDO production flux: ", bdo_reaction.flux)
+
+print("\n---after deletions---")
+koReaction = bigg.reactions.get_by_id("ATPM")
+koReaction.knock_out()
+
+bigg.optimize()
+print("objective reaction: ",targetReaction)
+print("flux of objective.reaction: ", targetReaction.flux)
+print("growth rate: ", newReaction.flux)
+print("objective value: ",bigg.objective.value)
+print("BDO production flux: ", bdo_reaction.flux)
