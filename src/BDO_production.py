@@ -185,13 +185,14 @@ dbo_export.add_metabolites({
 print(alcodehyd.reaction)
 
 # print(oxoGlut.metabolites)
+from cobra.flux_analysis import flux_variability_analysis
 
 print("---")
 targetReaction = bigg.reactions.get_by_id("BIOMASS_Ecoli")
+#targetReaction = bigg.reactions.get_by_id("bdo_ex")
 bdo_reaction = bigg.reactions.get_by_id("alcdehyd")
 bigg.objective = targetReaction
 bigg.optimize()
-
 print("objective reaction: ",targetReaction)
 print("flux of objective.reaction: ", targetReaction.flux)
 print("growth rate: ", newReaction.flux)
@@ -199,9 +200,18 @@ print("objective value: ",bigg.objective.value)
 print("reaction 4 flux: ", hydroBH.flux)
 print("BDO production flux: ", bdo_reaction.flux)
 
+beforeDel = flux_variability_analysis(bigg, bigg.reactions, fraction_of_optimum=0.9)
+
+print(beforeDel[dbo_export])
+
 print("\n---after deletions---")
-koReaction = bigg.reactions.get_by_id("ATPM")
-koReaction.knock_out()
+deletionL = ["LDH_D","LDH_D2","PFL","MDH","ALCD19"]
+
+for KOI in deletionL:
+  koReaction = bigg.reactions.get_by_id(KOI)
+  koReaction.knock_out()
+
+
 
 bigg.optimize()
 print("objective reaction: ",targetReaction)
@@ -209,3 +219,9 @@ print("flux of objective.reaction: ", targetReaction.flux)
 print("growth rate: ", newReaction.flux)
 print("objective value: ",bigg.objective.value)
 print("BDO production flux: ", bdo_reaction.flux)
+print(bigg.reactions)
+
+
+afterDel = flux_variability_analysis(bigg, bigg.reactions, fraction_of_optimum=0.9)
+
+print(afterDel[dbo_export])
