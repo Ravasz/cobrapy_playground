@@ -7,13 +7,13 @@ Created on 8 Nov 2017
 print("Hello Cameo")
 
 from cameo import load_model
-model = load_model('iJO1366')
+model = load_model('iJO1366') 
 
-# from cameo import fba
-# fba_result = fba(model)
-# print(fba_result)
-# print(fba_result.data_frame)
-# 
+from cameo import fba
+fba_result = fba(model)
+print(fba_result)
+print(fba_result.data_frame)
+ 
 # fba_result.display_on_map("iJO1366.Central metabolism")
 
 from cameo import pfba
@@ -35,6 +35,10 @@ print(model.reactions.PGI.lower_bound)
 print(pfba_knockout_result.objective_value)
 print(pfba_knockout_result[model.reactions.BIOMASS_Ec_iJO1366_core_53p95M])
 
+
+from cobra import io
+
+io.save_json_model(model,"test.json")
 
 
 
