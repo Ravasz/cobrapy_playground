@@ -35,10 +35,14 @@ print(model.reactions.PGI.lower_bound)
 print(pfba_knockout_result.objective_value)
 print(pfba_knockout_result[model.reactions.BIOMASS_Ec_iJO1366_core_53p95M])
 
+from cameo.strain_design import OptKnock
 
-from cobra import io
 
-io.save_json_model(model,"test.json")
+
+
+# from cobra import io
+
+# io.save_json_model(model,"test.json")
 
 
 
