@@ -289,14 +289,29 @@ def blaster(protSeq, orgnID = "Mus musculus"):
   
   from Bio.Blast.NCBIWWW import qblast
   from Bio.Blast import NCBIXML
+  from sys import exit
   
-  print("connecting to BLAST server. this will take some time...")
-  resX = qblast("blastp","refseq_protein", protSeq, entrez_query= orgnID + "[organism]")
-  print("connection successful")
-
-  resO = NCBIXML.read(resX)
+  print("\nconnecting to BLAST server. this will take some time...")
+  i = 1
+  while i < 4: # BLAST sometimes returns empty results. if so, try once more, it happens quite rarely and resending the query seems to fix it.
+    print("attempt number " + str(i))
+    i += 1
+    resX = qblast("blastp","refseq_protein", protSeq, entrez_query= orgnID + "[organism]")
+    resO = NCBIXML.read(resX)
+    if resO.descriptions != []: break 
+  if resO.descriptions == []: 
+    print("connection unsuccessful. The BLAST server is acting up. Try again later.")
+    exit(0)
+  
+  else: print("connection successful")
+    
+  print(resO.descriptions[0])
   descO = resO.descriptions[0]
-  if descO.e < 0.01: return descO.title.split("|")[3]
+  if descO.e < 0.01: 
+    descID = descO.title.split("|")[3]
+    if "." in descID: return descID.split(".")[0]
+    else: return descID
+      
   else: return "-"
     
 
@@ -324,6 +339,7 @@ def species_converter():
   
   procD = {} # key is human gene ID, value is a dict with human gene symbol as key, mouse gne symbol as value
   missL = []
+  missIDL = []
   
   for geneK, geneV in geneD.items(): # geneK: human gene ID, geneV = human gene symbol
     if geneV == "-": # handle missing gene symbols
@@ -339,19 +355,23 @@ def species_converter():
       
     else: 
       missL.append(geneV) # collect gene symbols for which no mouse homologue was found
+      missIDL.append(geneK) # collect matching gene IDs too
       procD[geneK] = {geneV: ["-"]} # store entries as missing for now
       
-  missSeqD = prot_sequence_finder(missL) # prepare a dict with keys as missing human gene symbols and values as their sequences in humans
+  missSeqD = prot_sequence_finder(missL) # prepare a dict with keys as missing human gene symbols and values as their sequences in humans where applicable
   missNameL = []
-  missIDL = []
+  missGIL = []
   print("BLASTing " + str(len(missSeqD)) + " sequences...")
   for keyS, valueS in missSeqD.items():
-    missIDL.append(blaster(valueS)) # blast sequences and get their mouse refseq protein GI. this step will take a lot of time. this list will contain mouse protein genbank accessions
+    missGIL.append(blaster(valueS)) # blast sequences and get their mouse refseq protein GI. this step will take a lot of time. this list will contain mouse protein genbank accessions
     missNameL.append(keyS) # the matching human gene symbols
     
-  missSymbolD = prot_id_converter(missIDL, "10090", "genbankproteinaccession", "geneid") # convert protein GIs to gene IDs. keys are mouse protein GIs, values are mouse gene IDs
+  missSymbolD = prot_id_converter(missGIL, "10090", "genbankproteinaccession", "genesymbol") # convert protein GIs to gene symbols. keys are mouse protein GIs, values are mouse gene symbols
+  print(missSymbolD)
+
+  
   for i in range(len(missIDL)):
-    procD[missNameL[i]] = {missIDL[i]: [missSymbolD[missIDL[i]]]} 
+    if missL[i] in missNameL: procD[missIDL[i]] = {missL[i]: [missSymbolD[missGIL[missNameL.index(missL[i])]]]} 
     
   mouseGeneL = []
   for keyS in procD.keys():
