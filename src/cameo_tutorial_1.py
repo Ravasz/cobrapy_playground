@@ -4,38 +4,55 @@ Created on 8 Nov 2017
 @author: mate
 '''
 
-print("Hello Cameo")
+# print("Hello Cameo")
 
 from cameo import load_model
 model = load_model('iJO1366') 
 
-from cameo import fba
-fba_result = fba(model)
-print(fba_result)
-print(fba_result.data_frame)
+randomrxn = model.reactions.get_by_id("ZN2tpp")
+
+print(randomrxn)
+print(randomrxn.metabolites)
+print(type(randomrxn.metabolites))
+for metKey, metValue in randomrxn.metabolites.items():
+  print(metKey, metValue)
+
+print(type(randomrxn.genes))
+
+for geneName in randomrxn.genes:
+  print(geneName)
+  
+  
+print(randomrxn.genes)
+
+# from cameo import fba
+# fba_result = fba(model)
+# print(fba_result)
+# print(fba_result.data_frame)
+
  
-# fba_result.display_on_map("iJO1366.Central metabolism")
-
-from cameo import pfba
-pfba_result = pfba(model)
-print(pfba_result.data_frame)
-print(pfba_result.objective_value)
-print(pfba_result[model.reactions.BIOMASS_Ec_iJO1366_core_53p95M])
-
-print(model.reactions.PGI.upper_bound)
-print(model.reactions.PGI.lower_bound)
-
-model.reactions.PGI.knock_out()
-
-pfba_knockout_result = pfba(model)
-
-print(model.reactions.PGI.upper_bound)
-print(model.reactions.PGI.lower_bound)
-
-print(pfba_knockout_result.objective_value)
-print(pfba_knockout_result[model.reactions.BIOMASS_Ec_iJO1366_core_53p95M])
-
-from cameo.strain_design import OptKnock
+# # fba_result.display_on_map("iJO1366.Central metabolism")
+# 
+# from cameo import pfba
+# pfba_result = pfba(model)
+# print(pfba_result.data_frame)
+# print(pfba_result.objective_value)
+# print(pfba_result[model.reactions.BIOMASS_Ec_iJO1366_core_53p95M])
+# 
+# print(model.reactions.PGI.upper_bound)
+# print(model.reactions.PGI.lower_bound)
+# 
+# model.reactions.PGI.knock_out()
+# 
+# pfba_knockout_result = pfba(model)
+# 
+# print(model.reactions.PGI.upper_bound)
+# print(model.reactions.PGI.lower_bound)
+# 
+# print(pfba_knockout_result.objective_value)
+# print(pfba_knockout_result[model.reactions.BIOMASS_Ec_iJO1366_core_53p95M])
+# 
+# from cameo.strain_design import OptKnock
 
 
 

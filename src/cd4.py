@@ -10,6 +10,7 @@ load in CD4 model, extract all proteins and save them to a new .csv
 from cameo import load_model, fba
 
 model = load_model('models/CD4T1670.xml')
+print(model.reactions)
 new_solution = model.optimize()
 fba_result = fba(model)
 print(fba_result)
