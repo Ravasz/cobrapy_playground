@@ -89,10 +89,11 @@ def homologue_parser():
     if valueS == []: del compDict[keyS]
     
   print("Done.\n")
+  
   return compDict
-    
-#   for keyS, valueS in compDict.items():
-#     print(keyS, valueS) 
+  # print(len(compDict))  
+  # for keyS, valueS in compDict.items():
+  #   print(keyS, valueS) 
 
 def gene_list_reader(splitLines = True):
   """read in a processed proteingroups.csv file and return the gene names as a list"""
@@ -604,9 +605,9 @@ def species_converter():
   print("file written")
         
       
-species_converter()
+# species_converter()
   
 # blaster("MEFHNGGHVSGIGGFLVSLTSRMKPHTLAVTPALIFAITVATIGSFQFGYNTGVINAPETIIKEFINKTLTDKANAPPSEVLLTNLWSLSVAIFSVGGMIGSFSVGLFVNRFGRRNSMLIVNLLAATGGCLMGLCKIAESVEMLILGRLVIGLFCGLCTGFVPMYIGEISPTALRGAFGTLNQLGIVIGILVAQIFGLELILGSEELWPVLLGFTILPAILQSAALPCCPESPRFLLINRKKEENATRILQRLWGTQDVSQDIQEMKDESARMSQEKQVTVLELFRVSSYRQPIIISIVLQLSQQLSGINAVFYYSTGIFKDAGVQQPIYATISAGVVNTIFTLLSLFLVERAGRRTLHMIGLGGMAFCSTLMTVSLLLKNHYNGMSFVCIGAILVFVACFEIGPGPIPWFIVAELFSQGPRPAAMAVAGCSNWTSNFLVGLLFPSAAYYLGAYVFIIFTGFLITFLAFTFFKVPETRGRTFEDITRAFEGQAHGADRSGKDGVMGMNSIEPAKETTTNV")
   
 # print(prot_sequence_finder(["COX7C","SLC2A14","CYP2D6","CYP3A4","LDHAL6A"]))
-
+homologue_parser()

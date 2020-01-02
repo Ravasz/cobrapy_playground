@@ -6,7 +6,7 @@ Created on 5 Oct 2017
 This script reads in the iJR904 E. Coli model from a json format, 
 and adds the BDO synthesis pathway to it
 '''
-from cobra import Reaction, Metabolite
+# from cobra import Reaction, Metabolite
 
 
 #this is a very detailed E. Coli model with about 1000 enzymes:
